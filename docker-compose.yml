@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - TOKEN=${TOKEN}
+      - ADMIN=${ADMIN}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    command: /app/.venv/bin/python run.py
