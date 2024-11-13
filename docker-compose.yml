@@ -9,5 +9,4 @@ services:
     environment:
       - TOKEN=${TOKEN}
       - ADMIN=${ADMIN}
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
     command: /app/.venv/bin/python run.py
