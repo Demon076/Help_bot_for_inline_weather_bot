@@ -20,13 +20,12 @@ class LogMiddleware(BaseMiddleware):
             logger = logging.getLogger(__name__)
             logger.error(text)
 
+    async def __call__(
+            self,
+            handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
+            update: Update,
+            data: Dict[str, Any]
+    ) -> Any:
+        self.bot_log(update)
 
-async def __call__(
-        self,
-        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
-        update: Update,
-        data: Dict[str, Any]
-) -> Any:
-    self.bot_log(update)
-
-    return await handler(update, data)
+        return await handler(update, data)

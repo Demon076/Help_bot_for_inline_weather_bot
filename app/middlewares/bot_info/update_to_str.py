@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from aiogram.types import Message, Update, CallbackQuery, InlineQuery
 
@@ -7,20 +7,27 @@ def general_to_str(obj: Message | CallbackQuery | InlineQuery):
     date = "Не задано"
     if hasattr(obj, 'date'):
         date = obj.date + timedelta(hours=3)
-    return (f'Пользователь: {obj.from_user.full_name}\n'
-            f'Chat_ID(ID): {obj.from_user.id}\n'
-            f'Ссылка: {obj.from_user.username}\n'
-            f'Время обработки: {datetime.utcnow() + timedelta(hours=3)}\n'
-            f'Время в update: {date}\n'
-            )
+    result = (f'Пользователь: {obj.from_user.full_name}\n'
+              f'User_ID: {obj.from_user.id}\n'
+              f'Ссылка: {obj.from_user.username}\n'
+              f'Время обработки: {datetime.now(timezone.utc) + timedelta(hours=3)}\n'
+              f'Время в update: {date}\n'
+              )
+    if hasattr(obj, 'chat'):
+        result += (f'Chat_full_name: {obj.chat.full_name}\n'
+                   f'Chat_ID: {obj.chat.id}\n')
+
+    return result
 
 
 def message_to_str(message: Message) -> str:
-    return general_to_str(message) + f'Написал: {message.text}\n'
+    return (general_to_str(message)
+            + f'Написал: {message.text}\n')
 
 
 def callback_to_str(callback: CallbackQuery) -> str:
-    return general_to_str(callback) + f'Отправил callback: {callback.data}\n'
+    return (general_to_str(callback)
+            + f'Отправил callback: {callback.data}\n')
 
 
 def inline_query_to_str(inline_query: InlineQuery) -> str:
